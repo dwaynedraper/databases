@@ -4,21 +4,34 @@ module.exports = {
   messages: {
     get: function (req, res) {
 
-      let modelsGet = () => {
-        let promise = new Promise((resolve, reject) => {
-          resolve(models.messages.get());
-        });
 
-        return promise;
-      };
+      // models.messages.get((err, data) => {
+      //   if (err) {
+      //     callback(err);
+      //   } else {
+      //     res.writeHead(200, headers);
+      //     res.end(data);
+      //   }
+      // });
+      models.messages.get();
 
-      modelsGet()
-        .then((data) => {
-          //somehow add data to response callback
-          //likely have to reformat to JSON or something the client expects
-          console.log(data);
-          // res.send(data);
-        });
+
+
+      // let modelsGet = () => {
+      //   let promise = new Promise((resolve, reject) => {
+      //     resolve(models.messages.get());
+      //   });
+
+      //   return promise;
+      // };
+
+      // modelsGet()
+      //   .then((data) => {
+      //     //somehow add data to response callback
+      //     //likely have to reformat to JSON or something the client expects
+      //     console.log(data);
+      //     // res.send(data);
+      //   });
 
 
     }, // a function which handles a get request for all messages

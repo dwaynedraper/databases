@@ -3,17 +3,18 @@ var db = require('../db').dbConnection;
 module.exports = {
   messages: {
     get: function () {
-      // db.connect();
 
-      // //write query
-      // let response = db.query('SELECT * FROM messages', (error, rows, fields) => {
-      //   if (error) {
-      //     throw error;
-      //   }
+      //write query
+      let response = db.query('SELECT * FROM messages', (error, rows, fields) => {
+        if (error) {
+          throw error;
+        } else {
+          console.log('rows:', rows);
+        }
+      });
+      console.log('rows:');
+      //return 'test data';
 
-      console.log('rows:', rows);
-      return 'test data';
-      // db.end();
 
     },
     //return query
