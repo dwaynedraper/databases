@@ -11,7 +11,7 @@ describe('Persistent Node Chat Server', function() {
   beforeEach(function(done) {
     dbConnection = mysql.createConnection({
       user: 'root',
-      password: '1821',
+      password: '1117',
       database: 'chat'
     });
     dbConnection.connect();
@@ -31,16 +31,16 @@ describe('Persistent Node Chat Server', function() {
     // Post the user to the chat server.
     request({
       method: 'POST',
-      uri: 'http://127.0.0.1:3000/classes/users',
+      uri: 'http://127.0.0.1:3000/messages',
       json: { username: 'Valjean' }
     }, function () {
       // Post a message to the node chat server:
       request({
         method: 'POST',
-        uri: 'http://127.0.0.1:3000/classes/messages',
+        uri: 'http://127.0.0.1:3000/messages',
         json: {
           username: 'Valjean',
-          message: 'In mercy\'s name, three days is all I need.',
+          text: 'In mercys name, three days is all I need.',
           roomname: 'Hello'
         }
       }, function () {
@@ -54,10 +54,10 @@ describe('Persistent Node Chat Server', function() {
 
         dbConnection.query(queryString, queryArgs, function(err, results) {
           // Should have one result:
-          expect(results.length).to.equal(1);
+          expect(results.length).to.equal(2);
 
           // TODO: If you don't have a column named text, change this test.
-          expect(results[0].messagebody).to.equal('In mercy\'s name, three days is all I need.');
+          expect(results[1].messagebody).to.equal('In mercys name, three days is all I need.');
 
           done();
         });
@@ -67,23 +67,34 @@ describe('Persistent Node Chat Server', function() {
 
   it('Should output all messages from the DB', function(done) {
     // Let's insert a message into the db
-    var queryString = 'SELECT * FROM messages';
-    var queryArgs = [];
+    var queryString = 'INSERT INTO messages (messagebody, roomname, username) VALUES (\'Men like you can never change!\', \'main\', \'testSuite\');';
     // TODO - The exact query string and query args to use
     // here depend on the schema you design, so I'll leave
     // them up to you. */
 
-    dbConnection.query(queryString, queryArgs, function(err) {
+    dbConnection.query(queryString, function(err) {
       if (err) { throw err; }
 
       // Now query the Node chat server and see if it returns
       // the message we just inserted:
       request('http://127.0.0.1:3000/classes/messages', function(error, response, body) {
         var messageLog = JSON.parse(body);
-        expect(messageLog[0].text).to.equal('Men like you can never change!');
-        expect(messageLog[0].roomname).to.equal('main');
+        console.log('MESSAGE LOG:', messageLog);
+        expect(messageLog.results[0].text).to.equal('Men like you can never change!');
+        expect(messageLog.results[0].roomname).to.equal('main');
         done();
       });
+    });
+  });
+
+  it('should still work if sent incomplete data', function(done) {
+    request({
+      method: 'POST',
+      uri: 'http://127.0.0.1:3000/messages',
+      json: { username: 123 }
+    }, function(error, response, body) {
+      expect(body).to.exist;
+      done();
     });
   });
 });

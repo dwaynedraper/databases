@@ -6,19 +6,20 @@ CREATE DATABASE chat;
 USE chat;
 
 CREATE TABLE rooms (
+  id int NOT NULL AUTO_INCREMENT,
   roomname char,
-  PRIMARY KEY(roomname)
+  PRIMARY KEY(id)
 );
 
 
 CREATE TABLE messages (
-  id int,
+  id int NOT NULL AUTO_INCREMENT,
   messagebody varchar(500),
   dateCreated datetime,
   roomname char(40),
   username char(40),
-  PRIMARY KEY(id),
-  FOREIGN KEY (roomname) REFERENCES rooms(roomname)
+  PRIMARY KEY(id)
+  -- FOREIGN KEY (roomname) REFERENCES rooms(roomname)
 );
 
 
