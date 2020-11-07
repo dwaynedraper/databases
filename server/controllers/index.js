@@ -21,8 +21,8 @@ module.exports = {
             responseObj.results.push(obj);
           }
           return responseObj;
-        }).then(string => {
-          res.send(string);
+        }).then(response => {
+          res.send(response);
         })
         .catch(err => console.log(err));
 
