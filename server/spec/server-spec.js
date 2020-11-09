@@ -97,4 +97,26 @@ describe('Persistent Node Chat Server', function() {
       done();
     });
   });
+
+  it('should serve index.html file on GET requests to root path /', function(done) {
+    request({
+      method: 'GET',
+      uri: 'http://127.0.0.1:3000/',
+    }, function(error, response, body) {
+      expect(body).to.contain('<!doctype html>');
+      done();
+    });
+  });
+
+  it('should return 404 on request to incorrect path', function(done) {
+    request({
+      method: 'GET',
+      uri: 'http://127.0.0.1:3000/unknown',
+    }, function(error, response, body) {
+      expect(response.statusCode).to.equal(404);
+      done();
+    });
+  });
+
+
 });
